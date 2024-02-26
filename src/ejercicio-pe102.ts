@@ -1,3 +1,8 @@
+/**
+ * @file ejercicio-pe102.ts
+ * @version 1.0.0
+ * @description Implementación de una clase genérica que implementa una interfaz genérica
+ */
 interface Collectable<T> {
   addItem(newItem: T): void;
   getItem(index: number): T;
@@ -5,18 +10,24 @@ interface Collectable<T> {
   getNumberOfItems(): number;
 }
 
+/**
+ * @class SearchableCollection
+ * @description Clase que implementa la interfaz Collectable y la interfaz Searchable
+ */
 interface Searchable<T>
   extends Collectable<T> {
   search(name: string ): T[] | undefined;
 }
 
+/**
+ * @class SearchableCollection
+ * @description Clase que implementa la interfaz Searchable
+ * @extends SearchableCollection
+ * @implements Searchable
+ */
 abstract class SearchableCollection<T> implements Collectable<T>, Searchable<T> {
   constructor(protected items: T[]) {
   }; // Array de items
-
-/*   getItems(): T[] { // Obtener los items
-    return this.items; // Devuelve el array de items
-  } */
 
   addItem(newItem: T): void { // Añadir un item
     this.items.push(newItem);
@@ -36,18 +47,29 @@ abstract class SearchableCollection<T> implements Collectable<T>, Searchable<T> 
 
   abstract search(name: string): T[] | undefined; // Buscar un item
 }
-
-class NumericSearchableCollection extends SearchableCollection<number> {
-  constructor(items: number[]) {
-    super(items);
-  }
-  search(numberToSearch: number) {
-    return this.items.filter((item) => item === numberToSearch);
+/**
+ * @class NumericSearchableCollection
+ * @description Clase que implementa la interfaz Searchable
+ * @extends SearchableCollection
+ * @implements Searchable
+ * @param numberToSearch
+ * @returns number[] | undefined
+ */
+export class NumericSearchableCollection extends SearchableCollection<number> {
+  search(numberToSearch: string) { // Buscar un número
+    return this.items.filter((item) => item === parseInt(numberToSearch));
   }
 }
-
-class StringSearchableCollection extends SearchableCollection<string> {
-  search(substringToSearch: string): string[] | undefined {
+/**
+ * @class StringSearchableCollection
+ * @description Clase que implementa la interfaz Searchable
+ * @extends SearchableCollection
+ * @implements Searchable
+ * @param substringToSearch
+ * @returns string[] | undefined
+ */
+export class StringSearchableCollection extends SearchableCollection<string> {
+  search(substringToSearch: string): string[] | undefined { // Buscar un substring
     return this.items.filter(item => item.includes(substringToSearch));
   }
 }
