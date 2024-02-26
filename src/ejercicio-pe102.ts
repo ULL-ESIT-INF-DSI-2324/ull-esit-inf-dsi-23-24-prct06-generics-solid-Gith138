@@ -1,6 +1,5 @@
 /**
- * @file ejercicio-pe102.ts
- * @version 1.0.0
+ * @class Collectable
  * @description Implementación de una clase genérica que implementa una interfaz genérica
  */
 interface Collectable<T> {
@@ -14,8 +13,7 @@ interface Collectable<T> {
  * @class SearchableCollection
  * @description Clase que implementa la interfaz Collectable y la interfaz Searchable
  */
-interface Searchable<T>
-  extends Collectable<T> {
+interface Searchable<T> {
   search(name: string ): T[] | undefined;
 }
 
@@ -25,7 +23,7 @@ interface Searchable<T>
  * @extends SearchableCollection
  * @implements Searchable
  */
-abstract class SearchableCollection<T> implements Collectable<T>, Searchable<T> {
+export abstract class SearchableCollection<T> implements Searchable<T>, Collectable<T> {
   constructor(protected items: T[]) {
   }; // Array de items
 
@@ -47,6 +45,7 @@ abstract class SearchableCollection<T> implements Collectable<T>, Searchable<T> 
 
   abstract search(name: string): T[] | undefined; // Buscar un item
 }
+
 /**
  * @class NumericSearchableCollection
  * @description Clase que implementa la interfaz Searchable
@@ -60,6 +59,7 @@ export class NumericSearchableCollection extends SearchableCollection<number> {
     return this.items.filter((item) => item === parseInt(numberToSearch));
   }
 }
+
 /**
  * @class StringSearchableCollection
  * @description Clase que implementa la interfaz Searchable
