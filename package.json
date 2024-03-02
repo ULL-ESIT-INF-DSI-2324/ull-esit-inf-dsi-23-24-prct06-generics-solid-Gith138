@@ -1,5 +1,5 @@
 {
-  "name": "ull-esit-inf-dsi-23-24-prct06-generics-solid-gith138",
+  "name": "package.json",
   "version": "1.0.0",
   "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/-o2PoJY5)",
   "main": "index.js",
@@ -12,8 +12,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/chai": "^4.3.11",
+    "@types/chai": "^4.3.12",
     "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.24",
     "@typescript-eslint/eslint-plugin": "^7.0.1",
     "@typescript-eslint/parser": "^7.0.1",
     "chai": "^4.4.1",
@@ -23,9 +24,11 @@
     "nyc": "^15.1.0",
     "ts-node": "^10.9.2",
     "tsc-watch": "^6.0.4",
-    "typedoc": "^0.25.8"
+    "typedoc": "^0.25.8",
+    "typescript": "^5.3.3"
   },
   "directories": {
+    "doc": "docs",
     "test": "tests"
   },
   "dependencies": {
@@ -180,7 +183,6 @@
     "type-check": "^0.4.0",
     "type-detect": "^4.0.8",
     "type-fest": "^0.20.2",
-    "typescript": "^5.3.3",
     "undici-types": "^5.26.5",
     "uri-js": "^4.4.1",
     "v8-compile-cache-lib": "^3.0.1",
