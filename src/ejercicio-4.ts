@@ -4,19 +4,19 @@ interface Device {
 }
 
 // Implementaciones concretas
-class Printer implements Device {
+export class Printer implements Device {
   performAction(): void {
     console.log('Printing...');
   }
 }
 
-class Scanner implements Device {
+export class Scanner implements Device {
   performAction(): void {
     console.log('Scanning...');
   }
 }
 
-class PrinterScanner implements Device {
+export class PrinterScanner implements Device {
   performAction(): void {
     console.log('Printing and Scanning...');
   }

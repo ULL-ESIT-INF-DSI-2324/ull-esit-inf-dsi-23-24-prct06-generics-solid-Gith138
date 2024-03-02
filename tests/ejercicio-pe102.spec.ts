@@ -34,6 +34,41 @@ describe('NumericSearchableCollection', () => {
 
     expect(result).to.deep.equal([5]);
   });
+  it('should search for a number', () => {
+    const collection = new NumericSearchableCollection([3, 4, 6, 7, 8, 9, 10]);
+
+    const result = collection.search("9");
+
+    expect(result).to.deep.equal([9]);
+  });
+  it('should search for a number', () => {
+    const collection = new NumericSearchableCollection([3, 4, 6, 7, 8, 9, 10]);
+
+    const result = collection.search("10");
+
+    expect(result).to.deep.equal([10]);
+  });
+  it('should search for a number', () => {
+    const collection = new NumericSearchableCollection([3, 4, 6, 7, 8, 9, 10]);
+
+    const result = collection.search("6");
+
+    expect(result).to.deep.equal([6]);
+  });
+  it('should search for a number', () => {
+    const collection = new NumericSearchableCollection([3, 4, 6, 7, 8, 9, 10]);
+
+    const result = collection.search("8");
+
+    expect(result).to.deep.equal([8]);
+  });
+  it('should search for a number', () => {
+    const collection = new NumericSearchableCollection([3, 4, 6, 7, 8, 9, 10]);
+
+    const result = collection.search("4");
+
+    expect(result).to.deep.equal([4]);
+  });
 });
 
 describe('StringSearchableCollection', () => {
@@ -65,4 +100,33 @@ describe('StringSearchableCollection', () => {
 
     expect(result).to.deep.equal(['date']);
   });
+  it('should search for a substring', () => {
+    const collection = new StringSearchableCollection(['HOY', 'FUIMOS', 'MANDO', 'RITMICA', 'GIMNASIA','ARTISTICA']);
+
+    const result = collection.search('HO');
+
+    expect(result).to.deep.equal(['HOY']);
+  });
+  it('should search for a substring', () => {
+    const collection = new StringSearchableCollection(['HOY', 'FUIMOS', 'MANDO', 'RITMICA', 'GIMNASIA','ARTISTICA']);
+
+    const result = collection.search('FU');
+
+    expect(result).to.deep.equal(['FUIMOS']);
+  });
+  it('should search for a substring', () => {
+    const collection = new StringSearchableCollection(['HOY', 'FUIMOS', 'MANDO', 'RITMICA', 'GIMNASIA','ARTISTICA']);
+
+    const result = collection.search('RIT');
+
+    expect(result).to.deep.equal(['RITMICA']);
+  });
+  it('should search for a substring', () => {
+    const collection = new StringSearchableCollection(['HOY', 'FUIMOS', 'MANDO', 'RITMICA', 'GIMNASIA','ARTISTICA']);
+
+    const result = collection.search('MA');
+
+    expect(result).to.deep.equal(['MANDO']);
+  });
+  
 });

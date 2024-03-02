@@ -4,21 +4,21 @@ interface NotificationService {
 }
 
 // Clase que permite enviar notificaciones por correo electrónico
-class EmailService implements NotificationService {
+export class EmailService implements NotificationService {
   notify(message: string): void {
     console.log(`Sending notification by email: ${message}`);
   }
 }
 
 // Clase que permite enviar notificaciones por SMS
-class ShortMessageService implements NotificationService {
+export class ShortMessageService implements NotificationService {
   notify(message: string): void {
     console.log(`Sending notification by SMS: ${message}`);
   }
 }
 
 // Clase que hace uso de diferentes tipos de servicios para realizar notificaciones
-class Notifier {
+export class Notifier {
   constructor(private notificationService: NotificationService) {
   }
 
