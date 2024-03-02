@@ -1,8 +1,23 @@
 // Interfaz para representar un enser
+/**
+ * @param {string} name
+ * @interface Item
+ * @returns {string}
+ */
 interface Item {
   name: string;
 }
 
+/**
+ * @param {T} item
+ * @interface Box
+ * @returns {void}
+  * @export Box
+  * @template T
+  * @param {T} item
+  * @param {T} item
+  * @param {void}
+ */
 // Interfaz para representar una caja que contiene enseres
 interface Box<T extends Item> {
   addItem(item: T): void;
@@ -11,11 +26,22 @@ interface Box<T extends Item> {
   searchItemByName(name: string): T | undefined;
 }
 
+/**
+ * @param {string} name
+ * @interface HouseholdItem
+ */
 // Clase que representa un enser del hogar
 export class HouseholdItem implements Item {
   constructor(public name: string) {}
 }
 
+/**
+ * @param {T} item
+ * @interface MovingBox
+ * @returns {void}
+ * @export MovingBox
+ * @template T
+ */
 // Clase que representa una caja para trasladar enseres
 export class MovingBox<T extends Item> implements Box<T> {
   private items: T[] = [];

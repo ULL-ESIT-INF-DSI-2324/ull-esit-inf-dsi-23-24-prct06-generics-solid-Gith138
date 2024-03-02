@@ -1,7 +1,21 @@
 // Interfaz que define el servicio de notificación
+/**
+ * @param {string} message
+ * @interface NotificationService
+ * @returns {string}
+ * @export NotificationService
+
+ */
 interface NotificationService {
   notify(message: string): void;
 }
+
+/**
+ * @param {string} message
+ * @interface NotificationService
+ * @returns {string}
+ * @export NotificationService
+ */
 
 // Clase que permite enviar notificaciones por correo electrónico
 export class EmailService implements NotificationService {
@@ -10,6 +24,12 @@ export class EmailService implements NotificationService {
   }
 }
 
+/***
+ * @param {string} message
+ * @interface EmailService
+ * @returns {string}
+ * @export EmailService
+ */
 // Clase que permite enviar notificaciones por SMS
 export class ShortMessageService implements NotificationService {
   notify(message: string): void {
@@ -17,6 +37,12 @@ export class ShortMessageService implements NotificationService {
   }
 }
 
+/***
+ * @param {string} message
+ * @interface ShortMessageService
+ * @returns {string}
+ * @export ShortMessageService
+ */
 // Clase que hace uso de diferentes tipos de servicios para realizar notificaciones
 export class Notifier {
   constructor(private notificationService: NotificationService) {

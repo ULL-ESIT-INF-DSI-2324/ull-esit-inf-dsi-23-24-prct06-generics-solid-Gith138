@@ -1,5 +1,11 @@
 import * as fs from 'fs';
 
+/**
+ * @param filePath: string
+ * @interface FileReader
+ * @returns {string}
+ * @export FileReader
+ */
 // Clase que lee el contenido de un archivo
 export class FileReader {
   constructor(private filePath: string) {}
@@ -15,6 +21,12 @@ export class FileReader {
   }
 } 
 
+/**
+ * @param filePath: string
+ * @interface FileWriter
+ * @returns {void}
+ * @export FileWriter
+ */
 // Clase que escribe datos en un archivo
 export class FileWriter {
   constructor(private filePath: string) {}
