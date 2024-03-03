@@ -14,9 +14,6 @@ interface Item {
  * @returns {void}
   * @export Box
   * @template T
-  * @param {T} item
-  * @param {T} item
-  * @param {void}
  */
 // Interfaz para representar una caja que contiene enseres
 interface Box<T extends Item> {
