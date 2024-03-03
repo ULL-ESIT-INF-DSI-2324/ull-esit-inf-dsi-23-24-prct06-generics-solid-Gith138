@@ -34,9 +34,78 @@ Y ya para ejecutarlo se usa
 **Ejercicio 1 - La mudanza**
 **Ejercicio 2 - Facturas en diferentes formatos**
 **Ejercicio 3 - Gestor de ficheros**
+En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`.
 **Ejercicio 4 - Impresoras y escáneres**
+En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`.
+
 **Ejercicio 5 - Servicio de mensajería**
-En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`
+
+En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`. 
+No está cumpliendo con el `Principio de Inversión de Dependencia`, este principio dice que los módulos de alto nivel no pueden depender de módulos de bajo nivel. Y en este caso las clases `EmailService` y `ShortMessageService` son clases concretas de bajo nivel, y la clase `Notifier` (clase de alto nivel) depende directamente de estas clases de bajo nivel. 
+```ts
+// Interfaz que define el servicio de notificación
+/**
+ * @param {string} message
+ * @interface NotificationService
+ * @returns {string}
+ * @export NotificationService
+
+ */
+interface NotificationService {
+  notify(message: string): void;
+}
+
+/**
+ * @param {string} message
+ * @interface NotificationService
+ * @returns {string}
+ * @export NotificationService
+ */
+
+// Clase que permite enviar notificaciones por correo electrónico
+export class EmailService implements NotificationService {
+  notify(message: string): void {
+    console.log(`Sending notification by email: ${message}`);
+  }
+}
+
+/***
+ * @param {string} message
+ * @interface EmailService
+ * @returns {string}
+ * @export EmailService
+ */
+// Clase que permite enviar notificaciones por SMS
+export class ShortMessageService implements NotificationService {
+  notify(message: string): void {
+    console.log(`Sending notification by SMS: ${message}`);
+  }
+}
+
+/***
+ * @param {string} message
+ * @interface ShortMessageService
+ * @returns {string}
+ * @export ShortMessageService
+ */
+// Clase que hace uso de diferentes tipos de servicios para realizar notificaciones
+export class Notifier {
+  constructor(private notificationService: NotificationService) {
+  }
+
+  sendNotification(message: string): void {
+    this.notificationService.notify(message);
+  }
+}
+
+// Código del cliente
+const emailNotifier = new Notifier(new EmailService());
+emailNotifier.sendNotification('Hello World!');
+
+const shortMessageNotifier = new Notifier(new ShortMessageService());
+shortMessageNotifier.sendNotification('Hello World!');
+```
+Para que no suceda eso, cree una interface `NotificationService` que sirve como una abtracción. Tanto `EmailService` como `ShortMessageService` implementan esta interfaz. La clase `Notifier` ahora depende de la interfaz en lugar de clases concretas, cumpliendo así con el principio de inversión de dependencia. 
 
 ### Dificultades
 
