@@ -400,9 +400,60 @@ shortMessageNotifier.sendNotification('Hello World!');
 ```
 Para que no suceda eso, cree una interface `NotificationService` que sirve como una abtracción. Tanto `EmailService` como `ShortMessageService` implementan esta interfaz. La clase `Notifier` ahora depende de la interfaz en lugar de clases concretas, cumpliendo así con el principio de inversión de dependencia. 
 
+
+**Ejercicio Modificación**
+
+Creé una interface `Collectable<T>`, en donde se implementa los distintos métodos:
+- `addItem` => Añade elementos
+- `getItem`=> Obtiene el elemento
+- `removeItem`=> Elimina el elemento
+- `getNumberOfItems` => Obtiene el número de elementos
+
+Creé otra `Searcheable<T>`, con un método que es `search`, que busca los elementos
+Después cree una clase abstracta `SearchableCollection<T> implements Searchable<T>, Collectable<T>`
+Que tiene como atributo privado un array de elementos `protected items: T[]`. En esta clase implemento las interfaces creadas anteriormente, para poder usar sus métodos
+```ts
+  addItem(newItem: T): void { // Añadir un item
+    this.items.push(newItem);
+  }
+
+  getItem(index: number): T { // Obtener un item
+    return this.items[index]; // Devuelve el item en la posición index
+  }
+
+  removeItem(): T { // Eliminar un item
+    return this.items.pop() as T; // Devuelve el último item del array, eliminándolo y usando el tipo T
+  }
+
+  getNumberOfItems(): number { // Obtener el número de items
+    return this.items.length; // Devuelve el número de items en el array
+  }
+
+  abstract search(name: string): T[] | undefined; // Buscar un item
+```
+En el caso del método `search`, lo puse de manera abstracta, haciendo que se necesite crear otras clases para poder utilizarlo. 
+Cree dos clases para:
+1. Buscar un elemento numérico en una array
+```ts
+export class NumericSearchableCollection extends SearchableCollection<number> {
+  search(numberToSearch: string) { // Buscar un número
+    return this.items.filter((item) => item === parseInt(numberToSearch));
+  }
+}
+```
+2. Buscar un elemento en una cadena de caracteres
+```ts
+export class StringSearchableCollection extends SearchableCollection<string> {
+  search(substringToSearch: string): string[] | undefined { // Buscar un substring
+    return this.items.filter(item => item.includes(substringToSearch));
+  }
+}
+
+```
+
 ### Dificultades
 
-  Esta práctica ha sido complicada, porque me ha resultado difícil entender bien el funcionamiento de las interfaces y demás, aunque son muy parecidas a las clases en c++(que es lo que se ha llevado estudiando desde principios de carrera). El problema es que al tener muchas maneras de implementarlas y demás, pues me ha costado mucho entenderlo a la primera(me sigue costando). También hay que tener en cuenta que el primer ejercicio me ha costado mucho de entender(he tenido que mandarle un correo, haciendo que me quedará sin tiempo para poder realizarla correctamente), y por suerte el segundo era similar al que ya habiamos hecho anteriormente, y lo único que había que hacer era cambiarle la estructura y demás.
+  Esta práctica ha sido dificíl, ya que me cuesta mucho entender bien las estructuras de herencias, clases, interfaces, y demás, pero haciendo los ejercicios se va entendiendo mejor las cosas. Igual me pasa con los Principios SOLID, ya que hay veces que es difiíl saber cual se cumple y cualés no, pero para eso están los ejercicios. :)
 
   
 ### Bibliografía
