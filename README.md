@@ -31,8 +31,167 @@ Y ya para ejecutarlo se usa
 ```
 
 ### Ejercicios y su explicación
+
 **Ejercicio 1 - La mudanza**
+
+En este ejercicio, lo que se debe hacer es gestionar los enseres que hay que trasladar de una vivienda a otra durante una mudanza. Estos pueden trasladarse en cajas y en ellas se puede poder almacenar diferentes tipos de enseres. A esa caja se le puede añadir y eliminar enseres, además de poder listar el contenido de cada una de ellas. también se puede buscar enseres en las cajas.
+Primero creé, las interfaces que representan la caja y los enseres, `Box`(donde este hereda de la interfaz `Item` y donde implementé los distintos métodos que este tendrá) 
+```ts
+// Interfaz para representar una caja que contiene enseres
+interface Box<T extends Item> {
+  addItem(item: T): void;
+  removeItem(item: T): void;
+  listContents(): void;
+  searchItemByName(name: string): T | undefined;
+}
+```
+y `Item`
+```ts
+// Interfaz para representar un enser
+interface Item {
+  name: string;
+}
+```
+Después creé las clases `MovingBox` y `HouseholdItem`
+```ts
+// Clase que representa un enser del hogar
+class HouseholdItem implements Item {
+  constructor(public name: string) {}
+}
+```
+En donde `HouseHoldItem` crea los enseres de la casa.
+Y ya en la clase `MovingBox<T extends Item> implements Box<T>`(`<T extends Item>`que T puede ser cualquier tipo que tenga al menos las propiedades definidas en la interfaz `Item`)(`implements Box<T>` que implementa la interfaz `Box`). 
+Ahora creo las funciones de la interfaz `Box`:
+- `addItem` => Añado enseres a la caja
+```ts
+  addItem(item: T): void {
+    this.items.push(item);
+    console.log(`"${item.name}" has been added to the box.`);
+  }
+```
+- `removeItem` => Elimino enseres de la caja
+```ts
+  removeItem(item: T): void {
+    const index = this.items.findIndex((i) => i === item);
+    if (index !== -1) {
+      this.items.splice(index, 1);
+      console.log(`"${item.name}" has been removed from the box.`);
+    } else {
+      console.log(`"${item.name}" not found in the box.`);
+    }
+  }
+```
+- `listContents` => Muestro uan lista de los enseres
+```ts
+  listContents(): void {
+    console.log('Box contents:');
+    this.items.forEach((item) => console.log(`- ${item.name}`));
+  }
+
+```
+- `searchItemByName` => Busco los enseres
+```ts
+  searchItemByName(name: string): T | undefined {
+    return this.items.find((item) => item.name === name);
+  }
+```
+
 **Ejercicio 2 - Facturas en diferentes formatos**
+
+En este ejercicio, lo que se debe hacer es gestionar facturación básica. Entre las funcionalidades, el sistema deberá permitir generar facturas en diferentes formatos como, por ejemplo, PDF o HTML. Además, su diseño deberá permitir añadir nuevos formatos de generación de facturas sin necesidad de modificar el resto del código que haya implementado.
+El principio de SOLID que se debe respetar es el de `Principio de Abierto/Cerrado (Open/Closed Principle)`. Este principio establece que una clase debe estar abierta para su extensión pero cerrada para su modificación. 
+```ts
+// Interfaz para representar un elemento en una factura
+/**
+ * @param {string} description
+ * @param {number} quantity
+ * @param {number} price
+ * @interface InvoiceItem
+ * @returns {string}
+ */
+export interface InvoiceItem {
+  description: string;
+  quantity: number;
+  price: number;
+}
+
+/**
+ * @param {InvoiceItem[]} items
+ * @interface InvoiceGenerator
+ * @returns {string}
+ * @export InvoiceGenerator
+ * @template InvoiceItem
+ */
+// Interfaz para el generador de factura
+interface InvoiceGenerator {
+  generateInvoice(items: InvoiceItem[]): string;
+}
+
+/**
+ * @param {InvoiceGenerator} generator
+ * @interface Invoice
+ * @returns {string}
+ * @export Invoice
+ * @template InvoiceItem
+ * @template InvoiceGenerator
+ */
+// Clase base para facturas
+export class Invoice {
+  constructor(private generator: InvoiceGenerator) {}
+
+  generate(items: InvoiceItem[]): string {
+    return this.generator.generateInvoice(items);
+  }
+}
+
+/**
+ * @param {InvoiceItem[]} items
+ * @interface PDFInvoiceGenerator
+ * @returns {string}
+ * @export PDFInvoiceGenerator
+ * @implements {InvoiceGenerator}
+ * @template InvoiceItem
+ * @template string
+ */
+// Generador de factura en formato PDF
+export class PDFInvoiceGenerator implements InvoiceGenerator {
+  generateInvoice(items: InvoiceItem[]): string {
+    // Lógica de generación de factura en formato PDF
+    return 'PDF Invoice:\n' + this.formatItems(items);
+  }
+
+  private formatItems(items: InvoiceItem[]): string {
+    return items.map(item => `${item.description} - ${item.quantity} x $${item.price}`).join('\n');
+  }
+}
+
+// Generador de factura en formato HTML
+export class HTMLInvoiceGenerator implements InvoiceGenerator {
+  generateInvoice(items: InvoiceItem[]): string {
+    // Lógica de generación de factura en formato HTML
+    return '<html><body>' + this.formatItems(items) + '</body></html>';
+  }
+
+  private formatItems(items: InvoiceItem[]): string {
+    return items.map(item => `<p>${item.description} - ${item.quantity} x $${item.price}</p>`).join('');
+  }
+}
+
+// Ejemplo de uso
+const items: InvoiceItem[] = [
+  { description: 'Product A', quantity: 2, price: 25.0 },
+  { description: 'Product B', quantity: 1, price: 30.0 },
+];
+
+const pdfInvoice = new Invoice(new PDFInvoiceGenerator());
+console.log(pdfInvoice.generate(items));
+
+const htmlInvoice = new Invoice(new HTMLInvoiceGenerator());
+console.log(htmlInvoice.generate(items)); 
+```
+En este código, he definido las interfaces `InvoiceItem` para representar los elementos de la factura y `InvoiceGenerator` para el generador de factura. Luego, creé las clases `PDFInvoiceGenerator` y `HTMLInvoiceGenerator` que implementan la interfaz `InvoiceGenerator` para generar facturas en formatos PDF y HTML.
+
+La clase `Invoice` se encarga de recibir un generador y utilizarlo para generar la factura, siguiendo así el `Principio de Abierto/Cerrado (Open/Closed Principle)`. Esto hace que se pueda agregar nuevos generadores de factura sin modificar la clase `Invoice`.
 
 **Ejercicio 3 - Gestor de ficheros**
 
@@ -245,9 +404,14 @@ Para que no suceda eso, cree una interface `NotificationService` que sirve como 
 
   Esta práctica ha sido complicada, porque me ha resultado difícil entender bien el funcionamiento de las interfaces y demás, aunque son muy parecidas a las clases en c++(que es lo que se ha llevado estudiando desde principios de carrera). El problema es que al tener muchas maneras de implementarlas y demás, pues me ha costado mucho entenderlo a la primera(me sigue costando). También hay que tener en cuenta que el primer ejercicio me ha costado mucho de entender(he tenido que mandarle un correo, haciendo que me quedará sin tiempo para poder realizarla correctamente), y por suerte el segundo era similar al que ya habiamos hecho anteriormente, y lo único que había que hacer era cambiarle la estructura y demás.
 
+  
+### Bibliografía
+
+- [Apuntes general del Campus de la Asignatura](https://ull-esit-inf-dsi-2324.github.io/typescript-theory/)
+  
   Grado de Ingeniería Informática
 
-  Godgith John
+  Godgith John, alu:0101463858
 
   Desarrollo de Sistemas Informáticos
 
