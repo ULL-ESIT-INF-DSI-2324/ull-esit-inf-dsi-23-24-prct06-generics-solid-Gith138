@@ -33,14 +33,148 @@ Y ya para ejecutarlo se usa
 ### Ejercicios y su explicación
 **Ejercicio 1 - La mudanza**
 **Ejercicio 2 - Facturas en diferentes formatos**
+
 **Ejercicio 3 - Gestor de ficheros**
-En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`.
+
+En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`. Este código lo que hace es coger un fichero de entrada y meterle información(`'This is new content to be written into the file.'`) en él. Para que funcione, hay que descargarse `@types/node`
+```ts
+[()$] npm install --save-dev @types/node
+```
+No está cumpliendo con el `Principio de Interfaz Única (Single Responsibility Principle)`, este principio dice que cada clase debe cumplir con una sola tarea.
+```ts
+import * as fs from 'fs'; // se pone por lo de @types/node
+
+/**
+ * @param filePath: string
+ * @interface FileReader
+ * @returns {string}
+ * @export FileReader
+ */
+// Clase que lee el contenido de un archivo
+export class FileReader {
+  constructor(private filePath: string) {}
+
+  public readFile(): string {
+    try {
+      const content: string = fs.readFileSync(this.filePath, 'utf-8');
+      return content;
+    } catch (error) {
+      console.error('Error al leer el archivo:', (error as Error).message);
+      return '';
+    }
+  }
+} 
+
+/**
+ * @param filePath: string
+ * @interface FileWriter
+ * @returns {void}
+ * @export FileWriter
+ */
+// Clase que escribe datos en un archivo
+export class FileWriter {
+  constructor(private filePath: string) {}
+
+  public writeFile(data: string): void {
+    try {
+      fs.writeFileSync(this.filePath, data, 'utf-8');
+      console.log('Archivo escrito exitosamente.');
+    } catch (error) {
+      console.error('Error al escribir en el archivo:', (error as Error).message);
+    }
+  }
+}
+
+// Cliente
+const filePath = 'example.txt';
+
+// Leyendo contenido
+const fileReader = new FileReader(filePath);
+const currentContent = fileReader.readFile();
+console.log('Current content:', currentContent);
+
+// Escribiendo contenido
+const newData = 'This is new content to be written into the file.';
+const fileWriter = new FileWriter(filePath);
+fileWriter.writeFile(newData);
+
+// Actualizando contenido
+const updatedContent = fileReader.readFile();
+console.log('Updated content:', updatedContent);
+```
+He creado dos clases `FileReader` y `FileWriter` cada una con su propia tarea. Y he eliminado la dependencia de `filePath` en `FileManager`ya que cada una gestiona su propio archivo.
+
 **Ejercicio 4 - Impresoras y escáneres**
-En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`.
+
+En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`. Este código implementa impresoras, en donde lo imprime y escáneres, donde lo escanean. `Printer` y `Scanner` 
+No está cumpliendo con el `Principio de Interfaz Única (Single Responsibility Principle)`, este principio dice que cada clase debe cumplir con una sola tarea. Tambien no cumple con el `Principio de Inversión de Dependencia`, este principio dice que los módulos de alto nivel no pueden depender de módulos de bajo nivel.
+En este código, todas las clases (`Printer`, `Scanner`, `PrinterScanner`) dependen directamente de la interfaz `PrintableScannable`. Esto puede considerarse una violación del principio de inversión de dependencia, ya que las clases de alto nivel (`Printer`, `Scanner` y `PrinterScanner`) dependen de una implementación concreta (`PrintableScannable`), en lugar de depender de abstracciones(o interfaces de bajo nivel).
+```ts
+/**
+ * @param performAction
+ * @interface Device
+ * @returns {void}
+ */
+// Interfaz de alto nivel
+interface Device {
+  performAction(): void;
+}
+
+/**
+ * @param performAction
+ * @interface Printer
+ * @returns {void}
+ */
+// Implementaciones concretas
+export class Printer implements Device {
+  performAction(): void {
+    console.log('Printing...');
+  }
+}
+
+/**
+ * @param performAction
+ * @interface Scanner
+ * @returns {void}
+ * @export Scanner
+ */
+export class Scanner implements Device {
+  performAction(): void {
+    console.log('Scanning...');
+  }
+}
+
+/**
+ * @param performAction
+ * @interface PrinterScanner
+ * @returns {void}
+ * @export PrinterScanner
+ */
+export class PrinterScanner implements Device {
+  performAction(): void {
+    console.log('Printing and Scanning...');
+  }
+}
+
+// Cliente
+const printer = new Printer();
+// Printing
+printer.performAction();
+
+const scanner = new Scanner();
+// Scanning
+scanner.performAction();
+
+const printerScanner = new PrinterScanner();
+// Printing and Scanning
+printerScanner.performAction();
+```
+Para que no suceda eso, lo que hice fue crear una interfaz de alto nivel `Device`, que no use las funcionalidades comunes(`print()` y `scan()`), sino que use uno en general(` performAction(): void`), que después se implementará en las diferentes clases.
+Y además las clases `Printer`(solo imprime), `Scanner`(solo escanéa) y `PrinterScanner`(imprime y escanéa), solo tienen una única tarea.
 
 **Ejercicio 5 - Servicio de mensajería**
 
-En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`. 
+En este ejercicio, se debe comprobar si el código implementado, cumple con los `Principios SOLID`. Este código, lo que hace es enviar notificaciones por correo o por SMS y en la clase `Notifier` puedes usar cualquiera de los dos métodos.
 No está cumpliendo con el `Principio de Inversión de Dependencia`, este principio dice que los módulos de alto nivel no pueden depender de módulos de bajo nivel. Y en este caso las clases `EmailService` y `ShortMessageService` son clases concretas de bajo nivel, y la clase `Notifier` (clase de alto nivel) depende directamente de estas clases de bajo nivel. 
 ```ts
 // Interfaz que define el servicio de notificación
